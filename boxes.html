@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <script src="https://aframe.io/releases/0.4.0/aframe.min.js"></script>
+  </head>
+  <body>
+    <a-scene id='scene'>
+      <a-sky color="#9bc1ff" />
+    </a-scene>
+    <script>
+      const scene = document.getElementById('scene')
+      for(let i = 0; i < 10; i++) {
+         const box = document.createElement('a-box');
+         box.setAttribute('position', `${Math.random()*6 - 3} ${Math.random()*6 - 3} ${Math.random()*6 - 3}`)
+         box.setAttribute('scale', '0.5 0.5 0.5');
+         scene.appendChild(box);
+
+         const cam = document.createElement('a-entity');
+         cam.setAttribute('position', `${Math.random()*6 - 3} ${Math.random()*6 - 3} ${Math.random()*6 - 3}`)
+         cam.setAttribute('camera')
+         cam.setAttribute('look-controls')
+         cam.setAttribute('class', 'cams')
+         scene.appendChild(cam);
+      }
+      const cams = document.querySelectorAll('.cams')
+      let activeCamIndex = 0;
+      window.setInterval(() => {
+        cams[activeCamIndex].removeAttribute('active');
+        activeCamIndex = Math.floor(Math.random() * (cams.length));
+        console.log(activeCamIndex);
+        cams[activeCamIndex].setAttribute('camera', 'active', true)
+        cams[activeCamIndex].setAttribute('look-controls', true)
+        console.log('~~~~~~~~~~~~~~');
+      }, 3000);
+    </script>
+  </body>
+</html>

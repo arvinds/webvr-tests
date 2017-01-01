@@ -1,2 +1,2 @@
 ## My Desk
-[My Desk](desk.html)
+[Boxes](boxes.html)
