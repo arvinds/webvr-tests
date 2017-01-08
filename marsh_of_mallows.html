@@ -18,7 +18,7 @@
         const scene = document.getElementById('scene');
         const mallowDist = 2;
         const mallowScale = 1;
-        const numMallows = 2;
+        const numMallows = 40;
         drawMallows(scene, mallowDist, numMallows, mallowScale);
       };
 
@@ -27,7 +27,7 @@
            const mallow = document.createElement('a-obj-model');
            mallow.setAttribute('position', `${randomFloat(mallowDist)} ${randomFloat(mallowDist)} ${randomFloat(mallowDist)}`);
            mallow.setAttribute('src', '#mallow');
-          //  mallow.setAttribute('scale', '0.2 0.2 0.2');
+           mallow.setAttribute('scale', '0.2 0.2 0.2');
 
            scene.appendChild(mallow);
 
