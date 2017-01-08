@@ -32,11 +32,10 @@
       };
       function drawRoom(scene, roomHeight, roomWidth, roomDepth) {
         const room = el('a-entity', {position: '0 0 0', id: 'room'});
-        const materialStr = `src: #wall; side: double; repeat: ${roomWidth/3} ${roomHeight/3}`;
-        const front = el('a-plane', {id: 'front', material: materialStr});
-        const back = el('a-plane', {id: 'back', material: materialStr});
-        const left = el('a-plane', {id: 'left', material: materialStr});
-        const right = el('a-plane', {id: 'right', material: materialStr});
+        const front = el('a-plane', {id: 'front'});
+        const back = el('a-plane', {id: 'back'});
+        const left = el('a-plane', {id: 'left'});
+        const right = el('a-plane', {id: 'right'});
         const sides = {front: front, left: left, back: back, right: right};
         setupsides(roomHeight, roomWidth, roomDepth, sides)
         addChildren(room, [front, left, back, right]);
@@ -56,7 +55,13 @@
             if (!wall) {
               wall = document.getElementById(sideId);
             }
-            setAttributes(wall, {height: roomHeight, width: wallWidth, position: wallPositions[sideId], rotation: rotation});
+            setAttributes(wall, {
+              height: roomHeight,
+              width: wallWidth,
+              position: wallPositions[sideId],
+              rotation: rotation,
+              material: `src: #wall; side: double; repeat: ${wallWidth/3} ${roomHeight/3}`
+            });
           });
       }
 
