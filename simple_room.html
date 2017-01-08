@@ -76,7 +76,7 @@
 
       function setupsides(roomHeight, roomWidth, roomDepth, sides = {}) {
           const sideData = getSideData(roomHeight, roomWidth, roomDepth);
-          ['front','left','back','right', 'floor'].forEach((sideId) => {
+          ['front','left','back','right','floor'].forEach((sideId) => {
             let sideEl = sides[sideId];
             if (!sideEl) {
               sideEl = document.getElementById(sideId);
@@ -117,7 +117,7 @@
         return Math.random() * (magnitude + MIN_DIMENSION_VALUE) + MIN_DIMENSION_VALUE;
       };
       setupScene();
-      // setInterval(setupScene, 2500);
+      //setInterval(setupScene, 2500);
     </script>
   </body>
 </html>
