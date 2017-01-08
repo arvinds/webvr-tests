@@ -5,57 +5,87 @@
   <body>
     <a-scene id='scene'>
       <a-assets>
-        <img id="floor" src="floor.jpg">
-        <img id="wall" src="wall.jpg">
-        <img id="ceiling" src="ceiling.jpg">
+        <img id="wall" src="http://files.gamebanana.com/img/ss/textures/53725f40937a5.jpg">
       </a-assets>
+      <a-sky color="#9bc1ff" />
     </a-scene>
     <script>
-      function randomFloat(magnitude) {
-        return Math.random() * magnitude - magnitude / 2;
-      };
-
+      const MIN_DIMENSION_VALUE = 2;
       function setupScene() {
         const scene = document.getElementById('scene');
-        const roomHeight = 2;
-        const roomWidth = 4;
-        const roomDepth = 2.5;
         const numLights = 10;
         const lightIntensity = 20.0;
-        drawRoom(scene, roomHeight, roomWidth, roomDepth, numLights, lightIntensity);
-        setupLighting(scene, roomHeight, roomWidth, roomDepth, numLights, lightIntensity);
+        if (document.getElementById('room')) {
+          setupsides(randomFloat(50), randomFloat(150), randomFloat(150));
+        } else {
+          drawRoom(scene, randomFloat(50), randomFloat(150), randomFloat(150));
+        }
+        setupLighting(scene, numLights, lightIntensity);
+      };
+      function getWallPositions(roomHeight, roomWidth, roomDepth) {
+        return {
+          front: `0 ${roomHeight/2} -${roomDepth/2}`,
+          left: `-${roomWidth/2} ${roomHeight/2} 0`,
+          right: `${roomWidth/2} ${roomHeight/2} 0`,
+          back: `0 ${roomHeight/2} ${roomDepth/2}`
+        };
+      };
+      function drawRoom(scene, roomHeight, roomWidth, roomDepth) {
+        const room = el('a-entity', {position: '0 0 0', id: 'room'});
+        const materialStr = `src: #wall; side: double; repeat: ${roomWidth/3} ${roomHeight/3}`;
+        const front = el('a-plane', {id: 'front', material: materialStr});
+        const back = el('a-plane', {id: 'back', material: materialStr});
+        const left = el('a-plane', {id: 'left', material: materialStr});
+        const right = el('a-plane', {id: 'right', material: materialStr});
+        const sides = {front: front, left: left, back: back, right: right};
+        setupsides(roomHeight, roomWidth, roomDepth, sides)
+        addChildren(room, [front, left, back, right]);
+        addChildren(scene, [room]);
       };
 
-      function drawRoom(scene, roomHeight, roomWidth, roomDepth, numLights, lightIntensity) {
-        const wall1 = drawPlane('#wall', 100, 100, '0 0 0', '0 45 0');
-        const wall2 = drawPlane('#wall', 100, 100, '0 0 0', '0 45 0');
-        const wall3 = drawPlane('#wall', 100, 100, '0 0 0', '0 45 0');
-        const wall4 = drawPlane('#wall', 100, 100, '0 0 0', '0 45 0');
-        const floor4 = drawPlane('#floor', 100, 100, '0 0 0', '0 45 0');
-        const ceiling = drawPlane('#ceiling', 100, 100, '0 0 0', '0 45 0');
-        addChildren(scene, [wall1, wall2, wall3, wall4, ceiling, floor])
+      function setupsides(roomHeight, roomWidth, roomDepth, sides = {}) {
+          const wallPositions = getWallPositions(roomHeight, roomWidth, roomDepth);
+          ['front','left','back','right'].forEach((sideId) => {
+            let wallWidth = roomWidth;
+            let rotation = '0 0 0';
+            if (sideId == 'left' || sideId == 'right') {
+               rotation = '0 90 0';
+              wallWidth = roomDepth;
+            }
+            let wall = sides[sideId];
+            if (!wall) {
+              wall = document.getElementById(sideId);
+            }
+            setAttributes(wall, {height: roomHeight, width: wallWidth, position: wallPositions[sideId], rotation: rotation});
+          });
+      }
+
+      function setupLighting(scene, numLights, lightIntensity) {
       };
-
-      function drawPlane(texture, height, width, position, rotation) {
-        return el('a-plane', {src: texture, height: height, width: width, position: position, rotation: rotation});
-      }
-
-      function setupLighting(scene, roomHeight, roomWidth, roomDepth, numLights, lightIntensity) {
-      }
 
       function el(elName, attrs) {
         const el = document.createElement(elName);
+        setAttributes(el, attrs);
+        return el;
+      };
+
+      function setAttributes(el, attrs) {
         for(var key in attrs) {
           el.setAttribute(key, attrs[key]);
         }
-        return el;
       }
+
       function addChildren(parent, children) {
         for(const child of children) {
           parent.appendChild(child);
         }
-      }
+      };
+
+      function randomFloat(magnitude) {
+        return Math.random() * (magnitude + MIN_DIMENSION_VALUE) + MIN_DIMENSION_VALUE;
+      };
       setupScene();
+      setInterval(setupScene, 2500);
     </script>
   </body>
 </html>
