@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <script src="https://aframe.io/releases/0.4.0/aframe.min.js"></script>
+  </head>
+  <body>
+    <a-scene id='scene'>
+      <a-sky color="#9bc1ff" />
+      <a-assets>
+        <a-asset-item id="mallow" src="assets/mallow.obj"></a-asset-item>
+      </a-assets>
+    </a-scene>
+    <script>
+      function randomFloat(magnitude) {
+        return Math.random() * magnitude - magnitude / 2;
+      };
+
+      function setupScene() {
+        const scene = document.getElementById('scene');
+        const mallowDist = 10;
+        const mallowScale = 4;
+        const numMallows = 100;
+        drawMallows(scene, mallowDist, numMallows, mallowScale);
+      };
+
+      function drawMallows(scene, mallowDist, numMallows, mallowScale) {
+        for (let i = 0; i < numMallows; i++) {
+           const mallow = document.createElement('a-entity');
+           mallow.setAttribute('position', `${randomFloat(mallowDist)} ${randomFloat(mallowDist)} ${randomFloat(mallowDist)}`);
+           mallow.setAttribute('obj', '#mallow');
+          //  mallow.setAttribute('scale', '0.2 0.2 0.2');
+
+           scene.appendChild(mallow);
+
+           const cam = document.createElement('a-entity');
+           cam.setAttribute('position', `${randomFloat(mallowDist)} ${randomFloat(mallowDist)} ${randomFloat(mallowDist)}`);
+           cam.setAttribute('camera');
+           cam.setAttribute('class', 'cams');
+           scene.appendChild(cam);
+        }
+      };
+
+      function setupInterval() {
+        const cams = document.querySelectorAll('.cams')
+        let activeCamIndex = 0;
+        window.setInterval((() => {
+          cams[activeCamIndex].removeAttribute('active');
+          activeCamIndex = Math.floor(Math.random() * (cams.length));
+          cams[activeCamIndex].setAttribute('camera', 'active', true)
+          cams[activeCamIndex].setAttribute('look-controls', true)
+        }).bind(this), 3000);
+      }
+
+      setupScene();
+      setupInterval();
+    </script>
+  </body>
+</html>
