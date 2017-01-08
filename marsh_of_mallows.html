@@ -4,10 +4,10 @@
   </head>
   <body>
     <a-scene id='scene'>
-      <a-sky color="#9bc1ff" />
       <a-assets>
         <a-asset-item id="mallow" src="assets/mallow.obj"></a-asset-item>
       </a-assets>
+      <a-sky color="#9bc1ff" />
     </a-scene>
     <script>
       function randomFloat(magnitude) {
@@ -24,9 +24,9 @@
 
       function drawMallows(scene, mallowDist, numMallows, mallowScale) {
         for (let i = 0; i < numMallows; i++) {
-           const mallow = document.createElement('a-entity');
+           const mallow = document.createElement('a-obj-model');
            mallow.setAttribute('position', `${randomFloat(mallowDist)} ${randomFloat(mallowDist)} ${randomFloat(mallowDist)}`);
-           mallow.setAttribute('obj', '#mallow');
+           mallow.setAttribute('src', '#mallow');
           //  mallow.setAttribute('scale', '0.2 0.2 0.2');
 
            scene.appendChild(mallow);
